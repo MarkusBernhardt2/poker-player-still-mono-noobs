@@ -16,18 +16,23 @@ namespace Nancy.Simple
          
             JToken player = gameState.SelectToken("$.players[?(@.name == 'still mono noobs')]");
             int bet = (int)player.SelectToken("bet");
-            
 
-            if (currentBuyIn - bet < 300 || AreGoodCards(player))
+            var cardsQuality = AreGoodCards(player);
+
+            if (currentBuyIn - bet < 300 || cardsQuality == CardsQuality.OK)
             { 
                 return currentBuyIn - bet;
+            }
+            if (cardsQuality == CardsQuality.VeryGood)
+            {
+                return currentBuyIn - bet + 100;
             }
 
             return 0;
 
         }
 
-        private static bool AreGoodCards(JToken player)
+        private static CardsQuality AreGoodCards(JToken player)
         {
             IEnumerable<JToken> pricyProducts = player.SelectTokens("hole_cards.Rank");
 
@@ -51,10 +56,15 @@ namespace Nancy.Simple
             if ((card1 == card2 && goodCards.Contains( card1)) ||
                     (goodCards2.Contains(card1) && goodCards2.Contains(card2)))
             {
-                return true;
+                return CardsQuality.VeryGood;
             }
 
-            return false;
+            if (goodCards2.Contains(card1) || goodCards2.Contains(card2))
+            {
+                return CardsQuality.OK;
+            }
+
+            return CardsQuality.Bad;
         }
 
         public static void ShowDown(JObject gameState)
@@ -63,5 +73,12 @@ namespace Nancy.Simple
 		}
 
 	}
+
+    public enum CardsQuality
+    {
+        VeryGood,
+        OK,
+        Bad
+    }
 }
 
