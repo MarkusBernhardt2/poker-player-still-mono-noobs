@@ -21,7 +21,7 @@ namespace Nancy.Simple
             var cardsQuality = AreGoodCards(player, communityCards);
              
 
-            if (currentBuyIn - bet < 300 || cardsQuality == CardsQuality.OK)
+            if (currentBuyIn - bet < 100 || cardsQuality == CardsQuality.OK)
             { 
                 return currentBuyIn - bet;
             }
