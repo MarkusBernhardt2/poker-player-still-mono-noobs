@@ -1,5 +1,6 @@
 ﻿using Nancy.Json;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace Nancy.Simple
 {
@@ -9,17 +10,25 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
-            
+
             //return 5;
-
-            RootObject test = CreateClass(gameState.ToString());
-
-            var us = FindUs(test);
-
-            if (us == null)
+            try
             {
-                return 5;
+                RootObject test = CreateClass(gameState.ToString());
+
+                var us = FindUs(test);
+
+                if (us == null)
+                {
+                    return 5;
+                }
             }
+            catch(Exception e)
+            {
+                return 3;
+            }
+            
+
 
 
             return 10;
