@@ -59,7 +59,7 @@ namespace Nancy.Simple
                 return CardsQuality.VeryGood;
             }
 
-            if (goodCards2.Contains(card1) || goodCards2.Contains(card2))
+            if (goodCards2.Contains(card1) || goodCards2.Contains(card2) || card1 == card2)
             {
                 return CardsQuality.OK;
             }
