@@ -12,17 +12,17 @@ namespace Nancy.Simple
             
             return 5;
 
-            RootObject test = CreateClass(gameState.ToString());
+            //RootObject test = CreateClass(gameState.ToString());
 
-            var us = FindUs(test);
+            //var us = FindUs(test);
 
-            if (us == null)
-            {
-                return 5;
-            }
+            //if (us == null)
+            //{
+            //    return 5;
+            //}
             
 
-            return 10;
+            //return 10;
 		}
 
         public static Player FindUs(RootObject root)
