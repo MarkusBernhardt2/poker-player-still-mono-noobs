@@ -45,6 +45,8 @@ namespace Nancy.Simple
 
             string card1 = string.Empty;
             string card2 = string.Empty;
+            string suit1 = string.Empty;
+            string suit2 = string.Empty;
             int counter = 0;
 
             foreach (var card in pricyProducts)
@@ -63,10 +65,31 @@ namespace Nancy.Simple
                 mycommunityCards.Add(card.ToString());
             }
 
+            counter = 0;
+            IEnumerable<JToken> cardColors = player.SelectTokens("hole_cards.suit");
+            foreach (var card in cardColors)
+            {
+                if (counter == 0)
+                    suit1 = card.ToString();
+                else
+                    suit2 = card.ToString();
+
+                counter++;
+            }
+
+            
 
             var goodCards = new List<string>() { "A", "K", "Q", "J", "10", "9", "8" };
             var goodCards2 = new List<string>() { "A", "K", "Q" };
-            
+
+            // Drilling
+            if (mycommunityCards.FindAll(x => x == card1).Count >= 2 ||
+                mycommunityCards.FindAll(x => x == card2).Count >= 2 ||
+                (card1 == card2 && mycommunityCards.Contains(card1)))
+            {
+                return CardsQuality.Brilliant;
+            }
+
             if ((card1 == card2 && goodCards.Contains( card1)) ||
                     (goodCards2.Contains(card1) && goodCards2.Contains(card2)) ||
                      ((mycommunityCards.Contains(card1) && goodCards2.Contains(card1)) || 
@@ -75,11 +98,13 @@ namespace Nancy.Simple
                 return CardsQuality.VeryGood;
             }
 
-            if (mycommunityCards.FindAll(x=>x == card1).Count >= 2 || 
-                mycommunityCards.FindAll(x => x == card2).Count >= 2 || 
-                (card1 == card2 && mycommunityCards.Contains(card1)))
+            if (suit1 == suit2 && mycommunityCards.Count == 0)
             {
-                return CardsQuality.Brilliant;
+                return CardsQuality.VeryGood;
+            }
+            if (suit1 == suit2)
+            {
+                return CardsQuality.OK;
             }
 
             if (goodCards2.Contains(card1) || goodCards2.Contains(card2) || card1 == card2 || mycommunityCards.Contains(card1) || mycommunityCards.Contains(card2))
