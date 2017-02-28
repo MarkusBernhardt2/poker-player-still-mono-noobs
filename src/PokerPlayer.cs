@@ -10,7 +10,7 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
-            int currentBuyIn = (int)gameState.SelectToken("game_state.current_buy_in");
+            int currentBuyIn = (int)gameState.SelectToken("current_buy_in");
 
             return currentBuyIn + 10;
 
