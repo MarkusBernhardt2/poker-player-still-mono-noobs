@@ -21,14 +21,19 @@ namespace Nancy.Simple
             var cardsQuality = AreGoodCards(player, communityCards);
              
 
-            if (currentBuyIn - bet < 100 || cardsQuality == CardsQuality.OK)
-            { 
-                return currentBuyIn - bet;
+            if (cardsQuality == CardsQuality.Brilliant)
+            {
+                return currentBuyIn - bet + 250;
             }
             if (cardsQuality == CardsQuality.VeryGood)
             {
                 return currentBuyIn - bet + 100;
             }
+            if (currentBuyIn - bet < 100 || cardsQuality == CardsQuality.OK)
+            { 
+                return currentBuyIn - bet;
+            }
+            
 
             return 0;
 
@@ -70,7 +75,12 @@ namespace Nancy.Simple
                 return CardsQuality.VeryGood;
             }
 
-
+            if (mycommunityCards.FindAll(x=>x == card1).Count >= 2 || 
+                mycommunityCards.FindAll(x => x == card2).Count >= 2 || 
+                (card1 == card2 && mycommunityCards.Contains(card1)))
+            {
+                return CardsQuality.Brilliant;
+            }
 
             if (goodCards2.Contains(card1) || goodCards2.Contains(card2) || card1 == card2 || mycommunityCards.Contains(card1) || mycommunityCards.Contains(card2))
             {
@@ -89,6 +99,7 @@ namespace Nancy.Simple
 
     public enum CardsQuality
     {
+        Brilliant,
         VeryGood,
         OK,
         Bad
