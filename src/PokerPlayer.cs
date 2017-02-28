@@ -9,7 +9,7 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
-
+            
             return 5;
 
             RootObject test = CreateClass(gameState.ToString());
