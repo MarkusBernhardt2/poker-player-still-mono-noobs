@@ -1,6 +1,7 @@
 ﻿using Nancy.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Nancy.Simple
 {
@@ -17,7 +18,7 @@ namespace Nancy.Simple
             int bet = (int)player.SelectToken("bet");
             
 
-            if (currentBuyIn - bet < 300)
+            if (currentBuyIn - bet < 300 || AreGoodCards(player))
             { 
                 return currentBuyIn - bet;
             }
@@ -25,8 +26,38 @@ namespace Nancy.Simple
             return 0;
 
         }
-        
-		public static void ShowDown(JObject gameState)
+
+        private static bool AreGoodCards(JToken player)
+        {
+            IEnumerable<JToken> pricyProducts = player.SelectTokens("hole_cards.Rank");
+
+            string card1 = string.Empty;
+            string card2 = string.Empty;
+            int counter = 0;
+
+            foreach (var card in pricyProducts)
+            {
+                if (counter == 0)
+                    card1 = card.ToString();
+                else
+                    card2 = card.ToString();
+
+                counter++;
+            }
+
+            var goodCards = new List<string>() { "A", "K", "Q", "J", "10", "9", "8" };
+            var goodCards2 = new List<string>() { "A", "K", "Q" };
+            
+            if ((card1 == card2 && goodCards.Contains( card1)) ||
+                    (goodCards2.Contains(card1) && goodCards2.Contains(card2)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void ShowDown(JObject gameState)
 		{
 			//TODO: Use this method to showdown
 		}
