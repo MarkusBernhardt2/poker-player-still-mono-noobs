@@ -11,27 +11,28 @@ namespace Nancy.Simple
 		public static int BetRequest(JObject gameState)
 		{
 
-            return 21;
-            //try
-            //{
-            //    RootObject test = CreateClass(gameState.ToString());
+            //return 21;
+            try
+            {
+                RootObject test = CreateClass(gameState.ToString());
 
-            //    var us = FindUs(test);
+                var us = FindUs(test);
 
-            //    if (us == null)
-            //    {
-            //        return 13;
-            //    }
-            //}
-            //catch(Exception )
-            //{
-            //    return 3;
-            //}
-            
+                if (us == null)
+                {
+                    return 13;
+                }
+                
+
+                return 5 + test.current_buy_in;
+            }
+            catch (Exception)
+            {
+                return 3;
+            }
 
 
 
-            //return 16;
         }
 
         public static Player FindUs(RootObject root)
