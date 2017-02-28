@@ -11,9 +11,18 @@ namespace Nancy.Simple
 		public static int BetRequest(JObject gameState)
 		{
             int currentBuyIn = (int)gameState.SelectToken("current_buy_in");
+            
+         
+            JToken player = gameState.SelectToken("$.players[?(@.name == 'still mono noobs')]");
+            int bet = (int)player.SelectToken("bet");
+            
 
-            return currentBuyIn + 10;
+            if (currentBuyIn - bet < 300)
+            { 
+                return currentBuyIn - bet;
+            }
 
+            return 0;
 
         }
         
