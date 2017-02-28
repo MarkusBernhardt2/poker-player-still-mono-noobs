@@ -17,7 +17,9 @@ namespace Nancy.Simple
             JToken player = gameState.SelectToken("$.players[?(@.name == 'still mono noobs')]");
             int bet = (int)player.SelectToken("bet");
 
-            var cardsQuality = AreGoodCards(player);
+            IEnumerable<JToken> communityCards = player.SelectTokens("community_cards.Rank");
+            var cardsQuality = AreGoodCards(player, communityCards);
+             
 
             if (currentBuyIn - bet < 300 || cardsQuality == CardsQuality.OK)
             { 
@@ -32,7 +34,7 @@ namespace Nancy.Simple
 
         }
 
-        private static CardsQuality AreGoodCards(JToken player)
+        private static CardsQuality AreGoodCards(JToken player, IEnumerable<JToken> communityCards)
         {
             IEnumerable<JToken> pricyProducts = player.SelectTokens("hole_cards.Rank");
 
@@ -50,16 +52,27 @@ namespace Nancy.Simple
                 counter++;
             }
 
+            var mycommunityCards = new List<string>();
+            foreach (var card in communityCards)
+            {
+                mycommunityCards.Add(card.ToString());
+            }
+
+
             var goodCards = new List<string>() { "A", "K", "Q", "J", "10", "9", "8" };
             var goodCards2 = new List<string>() { "A", "K", "Q" };
             
             if ((card1 == card2 && goodCards.Contains( card1)) ||
-                    (goodCards2.Contains(card1) && goodCards2.Contains(card2)))
+                    (goodCards2.Contains(card1) && goodCards2.Contains(card2)) ||
+                     ((mycommunityCards.Contains(card1) && goodCards2.Contains(card1)) || 
+                     (mycommunityCards.Contains(card2) && goodCards2.Contains(card2))))
             {
                 return CardsQuality.VeryGood;
             }
 
-            if (goodCards2.Contains(card1) || goodCards2.Contains(card2) || card1 == card2)
+
+
+            if (goodCards2.Contains(card1) || goodCards2.Contains(card2) || card1 == card2 || mycommunityCards.Contains(card1) || mycommunityCards.Contains(card2))
             {
                 return CardsQuality.OK;
             }
