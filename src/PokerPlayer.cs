@@ -23,7 +23,7 @@ namespace Nancy.Simple
                     return 5;
                 }
             }
-            catch(Exception e)
+            catch(Exception )
             {
                 return 3;
             }
