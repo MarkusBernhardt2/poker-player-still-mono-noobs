@@ -20,7 +20,7 @@ namespace Nancy.Simple
 
                 if (us == null)
                 {
-                    return 5;
+                    return 13;
                 }
             }
             catch(Exception )
@@ -31,7 +31,7 @@ namespace Nancy.Simple
 
 
 
-            return 10;
+            return 16;
         }
 
         public static Player FindUs(RootObject root)
